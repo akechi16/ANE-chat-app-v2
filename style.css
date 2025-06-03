@@ -1,0 +1,361 @@
+body {
+  background-color: #1e1e1e;
+  color: #000;
+  font-family: 'Meiryo UI', 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#chat-box,
+.bubble,
+button,
+input,
+.model-select {
+  font-family: 'Meiryo UI', 'Segoe UI', sans-serif;
+}
+
+/* 全体の中央揃えレイアウト */
+#chat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 90%;
+  margin: 20px auto;
+  padding: 10px;
+  background: #2e2e2e;
+  border-radius: 8px;
+  height: 70vh;
+  overflow-y: auto;
+}
+
+/* 各メッセージ */
+.message {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* お姉ちゃんのメッセージ（左） */
+.message.left {
+  flex-direction: row;
+}
+
+/* ユーザーのメッセージ（右） */
+.message.right {
+  flex-direction: row-reverse;
+  margin-left: auto;
+}
+
+/* アバター */
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 10px;
+}
+
+/* 吹き出し全体 */
+.bubble {
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 90%;
+  word-break: break-word;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 5px;
+}
+
+/* 空の段落・空行（空白だけ含むpタグも）を非表示に */
+.bubble p:empty,
+.bubble p:blank {
+  display: none;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  height: 0;
+}
+
+/* 空白だけのpタグを追加で制御（CSS疑似クラスが不十分な場合の保険） */
+.bubble p {
+  white-space: pre-wrap;
+}
+
+/* お姉ちゃんの吹き出し（薄ピンク） */
+.message.left .bubble {
+  background-color: #ffd3dc;
+  color: #000;
+}
+
+/* ユーザーの吹き出し（白） */
+.message.right .bubble {
+  background-color: #ffffff;
+  color: #000;
+}
+
+/* 最後の空白行削除用 */
+.bubble p:last-child:empty,
+.bubble br:last-child {
+  display: none;
+}
+
+.input-area {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: #e0e0e0;
+}
+
+.input-inner {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  max-width: 800px; /* チャット全体の最大幅に揃える場合 */
+  margin: 0 auto;
+}
+
+#user-input {
+  flex: 1;
+  resize: none;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  overflow-y: hidden;
+  min-height: 40px;
+  max-height: 300px;
+  box-sizing: border-box;
+
+  /* background-color: #fff; ←これを削除 or */
+  background-color: #f5f5f5; /* ←外側と合わせるならこっちにしてね！ */
+}
+
+.input-inner button {
+  padding: 10px 16px;
+  font-size: 16px;
+  border: none;
+  background-color: #222S;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+
+
+button:hover {
+  background-color: #f8c6d8;
+}
+
+.model-select {
+  text-align: center;
+  color: white;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.model-select button {
+  font-size: 16px;
+  margin: 0 5px;
+  background-color: #444;
+}
+
+
+.top-bar label {
+  color: white;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.top-bar select {
+  height: 36px;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-right: 10px;
+  background-color: #333;
+  color: white;
+  border: 1px solid #888;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  padding-left: 20px; /* 👈 左端に余白 */
+  background-color: #222;
+}
+
+/* ===== Markdownスタイル（行間・余白調整済み） ===== */
+
+.bubble {
+  font-family: Meiryo UI, sans-serif;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.bubble h1,
+.bubble h2,
+.bubble h3 {
+  margin: 0.3em 0 0.2em;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.bubble p {
+  margin: 0.2em 0;
+  line-height: 1.4;
+}
+
+.bubble code {
+  background-color: #f4f4f4;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-family: Consolas, monospace;
+  font-size: 0.95em;
+}
+
+.bubble pre {
+  background-color: #1e1e1e;
+  color: #f8f8f2;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: Consolas, monospace;
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.bubble pre code {
+  background: none;
+  padding: 0;
+}
+
+#chat-box {
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+textarea#user-input {
+  flex: 1;
+  resize: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  max-height: 200px;
+  overflow-y: auto;
+  line-height: 1.4;
+}
+
+/* 最後の空白行削除用 */
+.bubble p:last-child:empty,
+.bubble br:last-child {
+  display: none;
+}
+
+
+/* ===== スマホ対応用のメディアクエリ ===== */
+@media (max-width: 600px) {
+  .message {
+    flex-direction: column !important;
+    align-items: flex-start;
+  }
+
+  .message.right {
+    flex-direction: column !important;
+    align-items: flex-end;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    margin: 5px 0;
+  }
+
+  .bubble {
+    max-width: 100%;
+    font-size: 15px;
+  }
+
+  .input-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  #user-input {
+    font-size: 15px;
+    min-height: 60px;
+  }
+
+  .input-inner button {
+    width: 100%;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .top-bar select,
+  .top-bar button {
+    width: 100%;
+  }
+
+  .top-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background-color: #222;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.top-bar-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* 各ボタンの基本スタイルを維持 */
+.top-bar select,
+.top-bar button {
+  height: 36px;
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: #333;
+  color: white;
+  border: 1px solid #888;
+}
+
+/* モバイル時の調整 */
+@media (max-width: 600px) {
+  .top-bar-row {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .top-bar select,
+  .top-bar button {
+    flex: 1 1 45%;  /* 折り返しつつ2列に */
+    min-width: 120px;
+  }
+}
+
+}

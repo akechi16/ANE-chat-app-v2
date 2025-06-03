@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>お姉ちゃんChat</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <!-- 👇 <head>タグ内に追加 -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ffd3dc" />
+
+</head>
+<body>
+  <div class="top-bar">
+    <label for="model-select">Model Select：</label>
+    <select id="model-select">
+      <option value="gpt-3.5-turbo">GPT-3.5</option>
+      <option value="gpt-4">GPT-4</option>
+      <option value="gpt-4o">GPT-4o</option>
+    </select>
+    
+    <select id="chat-selector" onchange="switchChat(this.value)"></select>
+    <button onclick="newChat()">＋ New Chat</button>
+    <button onclick="editChatName()">✏️ Edit Chat Name</button>
+    <button onclick="deleteChat()">🗑 Delete</button>
+  </div>
+
+  <div id="chat-box"></div>
+
+<div class="input-area">
+  <div class="input-inner">
+    <textarea id="user-input" placeholder="enter your message..." rows="1"></textarea>
+    <button onclick="sendMessage()">SEND</button>
+  </div>
+</div>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker registered:', reg))
+      .catch(err => console.log('Service Worker registration failed:', err));
+  }
+</script>
+
+
+
+  <!-- 公開時はdemo版を読み込む -->
+<!--   <script src="script.demo.js"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('✅ Service Worker registered!', reg))
+        .catch(err => console.log('❌ Service Worker registration failed:', err));
+    });
+  }
+</script> -->
+
+
+  <!-- ローカル開発や本番ではlocal版に切り替える -->
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</body>
+</html>
