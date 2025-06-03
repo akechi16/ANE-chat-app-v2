@@ -1,16 +1,3 @@
-const response = await fetch("https://yellow-bonus-5512.akechi16.workers.dev", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": "あらかじめ決めたパスワード"
-  },
-  body: JSON.stringify({
-    messages: chats[currentChatId],
-    model: selectedModel,
-  }),
-});
-
-
 const systemPrompt = {
   role: "system",
   content:
@@ -48,7 +35,7 @@ function editChatName() {
   if (newName && newName.trim() !== "") {
     chatSelector.options[chatSelector.selectedIndex].text = newName;
 
-    // 保存されているプロジェクト名も更新
+    // 保存されているプロジェクト名も更新（もしあれば）
     const saved = localStorage.getItem("chatProjects");
     if (saved) {
       const projects = JSON.parse(saved);
@@ -59,7 +46,6 @@ function editChatName() {
     }
   }
 }
-
 
 function deleteChat() {
   const chatSelector = document.getElementById("chat-selector");
@@ -84,12 +70,23 @@ function deleteChat() {
       localStorage.setItem("chatProjects", JSON.stringify(projects));
     }
 
-    // チャット履歴をクリア
-    document.getElementById("chat-box").innerHTML = "";
+    // チャット履歴からも削除
+    delete chats[currentKey];
+    localStorage.setItem("chats", JSON.stringify(chats));
+
+    // 新しいチャットを選択 or 空にする
+    const keys = Object.keys(chats);
+    currentChatId = keys.length > 0 ? keys[0] : createNewChat();
+
+    // セレクトボックスを再描画
+    document.getElementById("chat-selector").innerHTML = keys
+      .map(id => `<option value="${id}">${id}</option>`)
+      .join("");
+    document.getElementById("chat-selector").value = currentChatId;
+
+    renderChat();
   }
 }
-
-
 
 function switchChat(id) {
   currentChatId = id;
@@ -119,7 +116,6 @@ function appendMessage(text, sender) {
   const bubble = document.createElement("div");
   bubble.className = "bubble";
 
-  // ← ここを条件分岐で変える
   bubble.innerHTML = sender === "left" && text === "……" ? "……" : marked.parse(text);
 
   messageDiv.appendChild(avatar);
@@ -162,11 +158,15 @@ async function sendMessage() {
     chats[currentChatId].push({ role: "assistant", content: reply });
     localStorage.setItem("chats", JSON.stringify(chats));
 
-    document.getElementById("chat-box").removeChild(document.getElementById("chat-box").lastChild);
+    // 「……」のメッセージを消す
+    const chatBox = document.getElementById("chat-box");
+    chatBox.removeChild(chatBox.lastChild);
+
     appendMessage(reply, "left");
 
   } catch (error) {
-    document.getElementById("chat-box").removeChild(document.getElementById("chat-box").lastChild);
+    const chatBox = document.getElementById("chat-box");
+    chatBox.removeChild(chatBox.lastChild);
     appendMessage(`エラーが起きたみたい💦：${error.message}`, "left");
     console.error("APIエラー:", error);
   }
@@ -181,7 +181,6 @@ function newChat() {
   renderChat();
 }
 
-
 const textarea = document.getElementById("user-input");
 
 // 高さを入力内容に応じて自動調整する関数
@@ -193,27 +192,14 @@ textarea.addEventListener("input", () => {
 // Shift+Enter で送信（Enter単体は改行）
 textarea.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && e.shiftKey) {
-    e.preventDefault(); // 改行防止
-    sendMessage();      // 送信
+    e.preventDefault();
+    sendMessage();
   }
 });
 
-// HTMLから呼び出される関数たちを公開しとく！
+// HTMLから呼び出される関数たちをグローバルに公開
 window.sendMessage = sendMessage;
 window.newChat = newChat;
 window.editChatName = editChatName;
 window.deleteChat = deleteChat;
 window.switchChat = switchChat;
-
-
-function sanitizeMessage(html) {
-  // 空白だけの段落やbrを削除
-  return html.replace(/<p>(\s|&nbsp;)*<\/p>/g, '')
-             .replace(/<br\s*\/?>\s*$/gi, '');
-}
-
-window.newChat = newChat;
-window.sendMessage = sendMessage;
-
-
-

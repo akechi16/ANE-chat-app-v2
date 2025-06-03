@@ -43,25 +43,7 @@
   }
 </script>
 
-
-
-  <!-- 公開時はdemo版を読み込む -->
-<!--   <script src="script.demo.js"></script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(reg => console.log('✅ Service Worker registered!', reg))
-        .catch(err => console.log('❌ Service Worker registration failed:', err));
-    });
-  }
-</script> -->
-
-
-  <!-- ローカル開発や本番ではlocal版に切り替える -->
-
-  <script src="script.js" type="module"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="script.js" defer></script>
 
 </body>
 </html>
