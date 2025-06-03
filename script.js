@@ -140,18 +140,18 @@ async function sendMessage() {
   appendMessage("……", "left");
 
   try {
-    const model = document.getElementById("model-select").value;
+    const selectedModel = document.getElementById("model-select").value;
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://yellow-bonus-5512.akechi16.workers.dev", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "あらかじめ決めたパスワード"  // 🔐仮置き
       },
       body: JSON.stringify({
-        model: model,
-        messages: chats[currentChatId]
-      })
+        messages: chats[currentChatId],
+        model: selectedModel
+      }),
     });
 
     if (!response.ok) throw new Error(`APIエラー！ステータス: ${response.status}`);
@@ -197,6 +197,13 @@ textarea.addEventListener("keydown", (e) => {
     sendMessage();      // 送信
   }
 });
+
+// HTMLから呼び出される関数たちを公開しとく！
+window.sendMessage = sendMessage;
+window.newChat = newChat;
+window.editChatName = editChatName;
+window.deleteChat = deleteChat;
+window.switchChat = switchChat;
 
 
 function sanitizeMessage(html) {
