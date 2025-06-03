@@ -2,10 +2,10 @@ const response = await fetch("https://yellow-bonus-5512.akechi16.workers.dev", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "Authorization": "あらかじめ決めたパスワード"  // ←ここが超大事！
+    "Authorization": "あらかじめ決めたパスワード"
   },
   body: JSON.stringify({
-    messages: messages,
+    messages: chats[currentChatId],
     model: selectedModel,
   }),
 });
@@ -211,5 +211,9 @@ function sanitizeMessage(html) {
   return html.replace(/<p>(\s|&nbsp;)*<\/p>/g, '')
              .replace(/<br\s*\/?>\s*$/gi, '');
 }
+
+window.newChat = newChat;
+window.sendMessage = sendMessage;
+
 
 
